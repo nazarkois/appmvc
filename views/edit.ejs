@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактирование филиала</title>
+    <%- include('blocks/head') %>
+    <style>.field{width:360px;}</style>
+</head>
+<body>
+    <%- include('blocks/header') %>
+    <h1>Редактирование филиала</h1>
+     <form action="/filialuszn/edit" method="post">
+        <label>№ филиала</label><br>
+        <label><%= filialsUSZN.id %></label>
+        <input name="id" value="<%= filialsUSZN.id %>" class="field" type="hidden"/><br><br>
+        <label>Имя филиала</label><br>
+        <input name="filial" value="<%= filialsUSZN.filial %>" class="field"/><br><br>
+        <label>Город</label><br>
+        <input name="town" value="<%= filialsUSZN.town %>" class="field"/><br><br>
+        <label>Сервер БД</label><br>
+        <input name="server_db" value="<%= filialsUSZN.server_db %>" class="field"/><br><br>
+        <label>Файл</label><br>
+        <input name="fileuszn" value="<%= filialsUSZN.fileuszn %>" class="field"/><br><br>
+
+        <input type="submit" value="Отправить"/>
+     </form>
+     <%- include('blocks/footer') %>
+</body>
+<html>

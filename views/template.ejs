@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Генератор документов</title>
+    <%- include('blocks/head') %>
+</head>
+<body class="d-flex flex-column h-100">
+    <%- include('blocks/header') %>
+    <div id="main">
+        <!-- Статья -->
+        <article>
+            <h1>Запрос</h1>
+            <form method="post">
+                <p><b>Путь шаблона:</b><br>
+                <input name="pathtem" value="<%= pathtem %>" class="field" type="text" size="133"><br>
+                <p><b>Путь файл:</b><br>
+                <input name="pathfile" value="<%= pathfile %>" class="field" type="text" size="133"><br>
+                <p><b>Скрипт:</b><br>
+                <textarea name="sqltext" class="field" cols="135" rows="10"><%= sqltext %></textarea>
+                <br>
+                <input name="button" type="submit" value="Выполнить"/>
+            </form>
+        </article>
+        <!-- Навигация -->
+        <nav>
+            <table class="table table-striped table-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Галчка</th>
+                        <th>Город (Район)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% template.forEach(function(field){ %>
+                        <tr>
+                            <td><%= field.check %></td>
+                            <td><%= field.town %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </nav>
+        <!-- Боковая панель -->
+        <aside></aside>
+    </div>
+    <%- include('blocks/footer') %>
+</body>
+<html>

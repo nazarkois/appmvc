@@ -1,0 +1,26 @@
+{
+  "name": "appmvc",
+  "version": "1.0.0",
+  "description": "nodejs",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "find": "^0.3.0",
+    "ini": "^1.3.5",
+    "sequelize": "^5.21.3",
+    "tedious": "^6.6.5",
+    "xlsx-template": "^0.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "nodejs"
+  ],
+  "author": "Ivan Nazarko <nazarko.ivan@gmail.com>",
+  "license": "ISC"
+}

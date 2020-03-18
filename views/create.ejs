@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавление филиала</title>
+    <%- include('blocks/head') %>
+    <style>.field{width:360px;}</style>
+</head>
+<body>\
+    <%- include('blocks/header') %>
+    <h1>Добавление филиала</h1>
+     <form method="post">
+        <label>Имя филиала</label><br>
+        <input name="filial" class="field"/><br><br>
+        <label>Город</label><br>
+        <input name="town" class="field"/><br><br>
+        <label>Сервер БД</label><br>
+        <input name="server_db" class="field"/><br><br>
+        <label>Файл</label><br>
+        <input name="fileuszn" class="field"/><br><br>
+
+        <input type="submit" value="Отправить" />
+     </form>
+     <%- include('blocks/footer') %>
+</body>
+<html>
