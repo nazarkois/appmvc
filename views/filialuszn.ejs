@@ -20,7 +20,9 @@
                         <th>№</th>
                         <th>Филиал</th>
                         <th>Город (Район)</th>
-                        <th>Сервер БД</th>
+                        <th>Сервер</th>
+                        <th>Порт</th>
+                        <th>БД</th>
                         <th>Маска файла</th>
                         <th>Статус</th>
                         <th></th>
@@ -32,7 +34,9 @@
                             <td><%= field.id %></td>
                             <td><%= field.filial %></td>
                             <td><%= field.town %></td>
-                            <td><%= field.server_db %></td>
+                            <td><%= field.server %></td>
+                            <td><%= field.port %></td>
+                            <td><%= field.db %></td>
                             <td><%= field.fileuszn %></td>
 
                             <% if (field.status === 1) {%>

@@ -8,14 +8,18 @@
 <body>\
     <%- include('blocks/header') %>
     <h1>Добавление филиала</h1>
-     <form method="post">
+     <form action="/filialuszn/create" method="post">
         <label>Имя филиала</label><br>
         <input name="filial" class="field"/><br><br>
         <label>Город</label><br>
         <input name="town" class="field"/><br><br>
-        <label>Сервер БД</label><br>
-        <input name="server_db" class="field"/><br><br>
-        <label>Файл</label><br>
+        <label>Сервер</label><br>
+        <input name="server" class="field"/><br><br>
+        <label>Порт</label><br>
+        <input name="port" class="field"/><br><br>
+        <label>БД</label><br>
+        <input name="db" class="field"/><br><br>
+        <label>Маска файла</label><br>
         <input name="fileuszn" class="field"/><br><br>
 
         <input type="submit" value="Отправить" />

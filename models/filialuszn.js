@@ -25,7 +25,11 @@ const FilialUSZN = sequelize.define('zz_filialsUSZN', {
         type: Sequelize.STRING,
         allowNull: true
     },
-    server_db: {
+    server: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    db: {
         type: Sequelize.STRING,
         allowNull: true
     },
@@ -38,6 +42,10 @@ const FilialUSZN = sequelize.define('zz_filialsUSZN', {
         allowNull: true
     },
     check: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+    },
+    port: {
         type: Sequelize.INTEGER,
         allowNull: true
     }

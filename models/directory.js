@@ -32,7 +32,7 @@ const directory = filUSZN => {
 
             if (!b) {
                 fs.mkdirSync(dir);
-                // console.log('Каталог создать: "' + dirf + '"');
+                console.log('Каталог создать: "' + dirf + '"');
 
                 // Статус по папке - 1. Папка без TicketID
                 var idUSZN = result.rows[i].dataValues.id;
@@ -40,7 +40,7 @@ const directory = filUSZN => {
                 .catch(err => console.log(err.message));
             }
             else {
-                // console.log('Каталог есть: "' + dirf + '"');
+                console.log('Каталог есть: "' + dirf + '"');
             };
         };
     });

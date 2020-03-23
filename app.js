@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
 app.use('/filialuszn', filialusznRouter);
 app.use('/template', templateRouter);
 app.use('/', homeRouter);
@@ -33,4 +34,4 @@ sequelize.sync().then(result => {
         console.log('Сервер ожидает подключения...');
     });
     // console.log(result)
-}).catch(err => console.log(err));
+}).catch(err => console.log(err.message));

@@ -23,10 +23,12 @@ exports.postfilialUSZN = function (req, res) {
     if (!req.body) return res.sendStatus(400);
     const filialUSZN = req.body.filial;
     const townUSZN = req.body.town;
-    const server_dbUSZN = req.body.server_db;
+    const serverUSZN = req.body.server;
+    const dbUSZN = req.body.db;
     const fileparamUSZN = req.body.fileuszn;
     const statusUSZN = req.body.status;
-    FilialUSZN.create({ filial: filialUSZN, town: townUSZN, server_db: server_dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN }).then(() => {
+    const portUSZN = req.body.port;
+    FilialUSZN.create({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN, port: portUSZN }).then(() => {
         res.redirect('/filialuszn');
     }).catch(err => console.log(err));
 };
@@ -47,10 +49,12 @@ exports.updatefilialUSZN = function (req, res) {
     const idUSZN = req.body.id;
     const filialUSZN = req.body.filial;
     const townUSZN = req.body.town;
-    const server_dbUSZN = req.body.server_db;
+    const serverUSZN = req.body.server;
+    const dbUSZN = req.body.db;
     const fileparamUSZN = req.body.fileuszn;
     const statusUSZN = req.body.status;
-    FilialUSZN.update({ filial: filialUSZN, town: townUSZN, server_db: server_dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN }, {where: {id: idUSZN} }).then(() => {
+    const portUSZN = req.body.port;
+    FilialUSZN.update({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN, port: portUSZN }, {where: {id: idUSZN} }).then(() => {
         res.redirect('/filialuszn');
     }).catch(err => console.log(err));
 };

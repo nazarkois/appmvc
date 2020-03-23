@@ -4,5 +4,7 @@ const templateRouter = express.Router();
 
 templateRouter.get('/', templateController.gettemplate);
 templateRouter.post('/', templateController.posttemplate);
+templateRouter.post('/check/:id', templateController.checktemplate);
+templateRouter.post('/checkall', templateController.checkalltemplate);
 
 module.exports = templateRouter;
