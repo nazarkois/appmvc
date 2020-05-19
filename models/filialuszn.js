@@ -48,6 +48,14 @@ const FilialUSZN = sequelize.define('zz_filialsUSZN', {
     port: {
         type: Sequelize.INTEGER,
         allowNull: true
+    },
+    filename: {
+        type: Sequelize.STRING,
+        allowNull: true        
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: true        
     }
 });
 

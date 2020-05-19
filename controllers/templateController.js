@@ -1,9 +1,9 @@
-// const XlsxTemplate = require('xlsx-template');
 const Template = require('../models/template.js');
 const Filial = require('../models/filialuszn.js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const path = require('path');
+// const http = require('http');
+const request = require('request');
 const ini = require('ini');
 
 const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
@@ -24,7 +24,7 @@ exports.gettemplate = function (req, res) {
         });
     })
     .catch(err => {
-        console.log(err);
+        console.error(err);
         return res.sendStatus(400);
     });
 };
@@ -39,27 +39,26 @@ exports.posttemplate = function (req, res) {
     const pathfile = req.body.pathfile;
     const sqltext = req.body.sqltext;
 
-    config.paths.pathtem = pathtem;
-    config.paths.pathfile = pathfile;
-    config.paths.sqltext = sqltext;
-    fs.writeFileSync('config.ini', ini.stringify(config, { section: '' }));
-    
+    ArrParams = [];
     Filial.findAndCountAll()
-    .then(qry => {
-        var one = true;
-        for (var i = 0; i < qry.count; i++) {
-            if (qry.rows[i].dataValues.check) {
-                Template.templatefull(sqltext, qry.rows[i].dataValues.db, user, pass, dial, qry.rows[i].dataValues.server, qry.rows[i].dataValues.port, one);
-                var one = false;
+    .then(query => { 
+        for (i in query.rows) {
+            if (query.rows[i].dataValues.check) {
+                ArrParams.push({ sqltext: sqltext, db: query.rows[i].dataValues.db, user: user, pass: pass, dial: dial, server: query.rows[i].dataValues.server, port: query.rows[i].dataValues.port });
             }
         };
+        Template.JSONtoCSV(ArrParams);;
     })
-    .finally(() => {
-        Template.templatexlsx(pathtem, pathfile);
+    .then(() => {
+        config.paths.pathtem = pathtem;
+        config.paths.pathfile = pathfile;
+        config.paths.sqltext = sqltext;
+        fs.writeFileSync('config.ini', ini.stringify(config, { section: '' }));
+    })
+    .then(() => {
+        res.redirect('/template');
     })
     .catch(err => console.error(err));
-
-    res.redirect('/template');
 };
 
 // Чеки к филиалу
@@ -75,26 +74,23 @@ exports.checktemplate = function (req, res) {
 };
 
 // Чеки к филиалам
-exports.checkalltemplate  = function (req, res) {
+exports.checkalltemplate  = (req, res) => {
     Filial.findAndCountAll()
     .then(qry => {
-        var c = 0;
-        var c_all = qry.count;
-        for (var i = 0; i < qry.count; i++) {
-            if (qry.rows[i].dataValues.check) {
-                var c = c + 1
-            }
+        let c = 0;
+        for (i in qry.rows) {
+            if (qry.rows[i].dataValues.check) { c++ }
         };
 
-        if (c < c_all)  {
-            var Ochk = {
+        if (c < qry.count) {
+            Ochk = {
                 check: 1,
                 chkname: 'checkbox-checked',
                 chklabel: 'Снять все филиалы'
             }
         }
         else {
-            var Ochk = {
+            Ochk = {
                 check: 0,
                 chkname: 'checkbox',
                 chklabel: 'Выбрать все филиалы'
@@ -103,14 +99,13 @@ exports.checkalltemplate  = function (req, res) {
 
         Filial.update({ check: Ochk.check }, { where: { id: { [Op.ne]: 0 } } })
         .then(() => {
+            config.paths.chkall = Ochk.check;
+            config.paths.chkname = Ochk.chkname;
+            config.paths.chklabel = Ochk.chklabel;
+            fs.writeFileSync('config.ini', ini.stringify(config, { section: '' }));
             res.redirect('/template');
         })
         .catch(err => console.error(err));
-
-        config.paths.chkall = Ochk.check;
-        config.paths.chkname = Ochk.chkname;
-        config.paths.chklabel = Ochk.chklabel;
-        fs.writeFileSync('config.ini', ini.stringify(config, { section: '' }));
     })
     .catch(err => console.error(err));
 };

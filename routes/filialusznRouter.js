@@ -9,5 +9,8 @@ filialusznRouter.get('/edit/:id', filialusznController.editfilialUSZN);
 filialusznRouter.post('/edit', filialusznController.updatefilialUSZN);
 filialusznRouter.post('/delete/:id', filialusznController.deletefilialUSZN);
 filialusznRouter.post('/directory', filialusznController.postDirectory);
+filialusznRouter.post('/unarchive', filialusznController.postUnarchive);
+filialusznRouter.post('/archive', filialusznController.postArchive);
+filialusznRouter.post('/dbfdelete', filialusznController.postDBFdelete);
 
 module.exports = filialusznRouter;

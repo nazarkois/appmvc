@@ -1,44 +1,54 @@
 const XlsxTemplate = require('xlsx-template');
 const Sequelize = require('sequelize');
-const Papa = require('papaparse')
+const Papa = require('papaparse');
 const fs = require('fs');
-const path = require('path');
-const ini = require('ini');
+const encoding = require('encoding');
 
-const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
-
-const templatefull = async function(sqltext, db, user, pass, dial, host, port, one) {
-    const sequelize = new Sequelize(db, user, pass, {
-        dialect: dial,
-        host: host,
-        port: port,
-        define: { timestamps: false, freezeTableName: true }
-    });
-
-    await sequelize.query(sqltext, { type: sequelize.QueryTypes.SELECT })
-    .then(qry => {
-        // Конвертировать обратно в CSV
-        if (one) {
-            (async function write(data) {
-                var csv = await Papa.unparse(data, {delimiter: "|"});
-                await fs.writeFileSync('./temp/temp.csv', csv);
-                console.log('Данные в БД: ' + db + ' сохранил!');
-            })(qry);
-        }
-        else {
-            (async function append(data) {
-                var csv = await Papa.unparse(data, {delimiter: "|", header: false});
-                await fs.appendFileSync('./temp/temp.csv', '\r\n'+csv);
-                console.log('Данные в БД: ' + db + ' сохранил!');
-            })(qry);
-        };
+const delay = ms => {
+    return new Promise(r => {
+        setTimeout(() => r(), ms)
     })
-    .catch(err => console.log(err.message))
+};
+
+const JSONtoCSV = async function(ArrParams) {
+    // Все запросы к всем базы данные
+    var ArrTotal = [];
+    for (var i in ArrParams) {
+        var sequelize = new Sequelize(ArrParams[i].db, ArrParams[i].user, ArrParams[i].pass, {
+            dialect: ArrParams[i].dial,
+            host: ArrParams[i].server,
+            port: ArrParams[i].port,
+            dialectOptions: {
+                options: { requestTimeout: 300000 }
+            },
+            logging: false,
+            define: { timestamps: false, freezeTableName: true }
+        });
+        
+        await sequelize.query(ArrParams[i].sqltext, { type: sequelize.QueryTypes.SELECT })
+        .then(query => {
+            for (j in query) {
+                ArrTotal.push(query[j]); 
+            };
+            // console.log(JSON.stringify(ArrTotal));
+        })
+        .catch(err => console.error(err))
+    }   
+    await console.log(JSON.stringify(ArrTotal));
+
+    // JSON конвертировать CSV 
+    const csv = Papa.unparse(ArrTotal, { delimiter: ';', header: true });
+    const result = encoding.convert(csv, 'windows-1251', 'utf-8');
+    fs.writeFileSync('./temp/temp.csv', result);
 }
 
-const templatexlsx = async (pathtem, pathfile) => {
+const templatexlsx = (pathtem, pathfile) => {
+    fs.unlink(pathfile, () => {
+        console.log('Удалил файл: ' + pathfile);
+    });
+
     // Загрузите файл XLSX в память
-    await fs.readFile(pathtem, function(err, data) {
+    fs.readFile(pathtem, function(err, data) {
         if (err) throw err;
 
         // Создать шаблон
@@ -49,14 +59,13 @@ const templatexlsx = async (pathtem, pathfile) => {
 
         // Разобрать строку CSV
         (async function read() {
-            await fs.readFile('./temp/temp.csv', 'utf8', function(err, rdata) {
-                if (err) throw err;
-
+            try {
+                var rdata = fs.readFileSync('./temp/temp.csv', 'utf8');
                 var json = Papa.parse(rdata, {delimiter: "|", header: true});
 
                 // Установите некоторые значения заполнителей, соответствующие заполнителям в шаблоне
                 var values = {
-                    extractDate: new Date(),
+                    extractDate: Date(),
                     // dates: [ new Date("2013-06-01"), new Date("2013-06-02"), new Date("2013-06-03") ],
                     q_data: json.data
                 };
@@ -65,27 +74,21 @@ const templatexlsx = async (pathtem, pathfile) => {
                 xlsxtemplate.substitute(sheetNumber, values);
 
                 // Получить двоичные данные
-                var data = xlsxtemplate.generate({type: 'nodebuffer'});
+                var fdata = await xlsxtemplate.generate({type: 'nodebuffer'});
 
                 // ...
-                fs.writeFile(pathfile, data, (err) => {
-                    if (err) throw err.message;
-                });
+                await fs.writeFile(pathfile, fdata);
                 console.log('Все данные в Excel сохранил!');
-            });
-
-            await fs.close('./temp/temp.csv', (err) => {
-                if (err) throw err.message;
-            });
+            }
+            catch (err) {
+                console.error(err);
+            }
         })();
-    });
-
-    await fs.close(pathfile, (err) => {
-        if (err) throw err.message;
     });
 }
 
 module.exports = {
-    templatefull: templatefull,
+    delay: delay,
+    JSONtoCSV: JSONtoCSV,
     templatexlsx: templatexlsx
 }

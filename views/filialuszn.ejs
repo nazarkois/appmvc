@@ -1,74 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Список УСЗН</title>
-    <%- include('blocks/head') %>
+	<title>Список УСЗН</title>
+	<%- include('blocks/head') %>
 </head>
 <body>
-    <%- include('blocks/header') %>
-    <div id="main">
-        <!-- Статья -->
-        <article>
-            <h1>Список филиалов</h1>
-            <a href="/filialuszn/create"><img src="/public/images/add.png" width="20"></a>
-            <form action="/filialuszn/directory" method="post" style="display:inline;">
-                <input type="image" src="/public/images/folder.png" width="20" value="Каталоги в месяце" />
-            </form>
-            <table class="table table-striped table-sm">
-                <thead class="thead-light">
-                    <tr>
-                        <th>№</th>
-                        <th>Филиал</th>
-                        <th>Город (Район)</th>
-                        <th>Сервер</th>
-                        <th>Порт</th>
-                        <th>БД</th>
-                        <th>Маска файла</th>
-                        <th>Статус</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% filialsUSZN.forEach(function(field){ %>
-                        <tr>
-                            <td><%= field.id %></td>
-                            <td><%= field.filial %></td>
-                            <td><%= field.town %></td>
-                            <td><%= field.server %></td>
-                            <td><%= field.port %></td>
-                            <td><%= field.db %></td>
-                            <td><%= field.fileuszn %></td>
+	<%- include('blocks/header') %>
+	<div id="main">
+		<!-- Статья -->
+		<article>
+			<h1>Список филиалов</h1>
+			<a href="/filialuszn/create" method="get"><img title="Добавить" src="/public/images/add.png" width="25"></a>
+			<form action="/filialuszn/directory" method="post" style="display:inline;">
+				<a href="/filialuszn/directory">
+					<input title="Обновить каталоги в месяце" type="image" src="/public/images/folder.png" width="25" />
+				</a>
+			</form>
+			<form action="/filialuszn/unarchive" method="post" style="display:inline;">
+				<a href="/filialuszn/unarchive">
+					<input title="Все архивы распаковать" type="image" src="/public/images/unarchive.png" width="25" />
+				</a>
+			</form>
+			<form action="/filialuszn/archive" method="post" style="display:inline;">
+				<a href="/filialuszn/archive">
+					<input title="Все архивы сжать" type="image" src="/public/images/archive.png" width="25" />
+				</a>
+			</form>
+			<form action="/filialuszn/dbfdelete" method="post" style="display:inline;">
+				<a href="/filialuszn/dbfdelete">
+					<input title="Все DBF-файлы удалить" type="image" src="/public/images/dbfdelete.png" width="25" />
+				</a>
+			</form>
+			<table class="table table-striped table-sm">
+				<thead class="thead-light">
+					<tr>
+						<th>№</th>
+						<!-- <th>Филиал</th> -->
+						<th>Город (Район)</th>
+						<th>Сервер</th>
+						<!-- <th>Порт</th> -->
+						<!-- <th>БД</th> -->
+						<!-- <th>Маска файла</th> -->
+						<th>E-mail</th>
+						<th>Файл</th>
+						<th>Статус</th>
+						<th>Операции</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% filialsUSZN.forEach(function(field) { %>
+						<tr>
+							<td><%= field.id %></td>
+							<!-- <td><%= field.filial %></td> -->
+							<td><%= field.town %></td>
+							<td><%= field.server %></td>
+							<!-- <td><%= field.port %></td> -->
+							<!-- <td><%= field.db %></td> -->
+							<!-- <td><%= field.fileuszn %></td> -->
+							<th><%= field.email %></th>
+							<td><%= field.filename %></td>
 
-                            <% if (field.status === 1) {%>
-                            <td>1. Папка без TicketID</td>
-                            <% } else if (field.status === 2) {%>
-                            <td>2. Импорт с архивом</td>
-                            <% } else if (field.status === 3) {%>
-                            <td>3. Импорт с файлом</td>
-                            <% } else if (field.status === 4) {%>
-                            <td>4. Экпорт с файлом</td>
-                            <% } else if (field.status === 5) {%>
-                            <td>5. Экпорт с архивом</td>
-                            <% } else {%>
-                            <td></td>
-                            <%} %>
+							<% if (field.status === 1) {%>
+								<td><input type="image" src="/public/images/folder-empty.png" width="25"></td>
+							<% } else if (field.status === 2) {%>
+								<td><input type="image" src="/public/images/document-arc-import.png" width="25"></td>
+							<% } else if (field.status === 3) {%>
+								<td><input type="image" src="/public/images/file-dbf-import.png" width="25"></td>
+							<% } else if (field.status === 4) {%>
+								<td><input type="image" src="/public/images/file-dbf-export.png" width="25"></td>
+							<% } else if (field.status === 5) {%>
+								<td><input type="image" src="/public/images/document-arc-export.png" width="25"></td>
+							<% } else {%>
+							<td></td>
+							<%} %>
 
-                            <td>
-                                <a href="/filialuszn/edit/<%= field.id %>"><img src="/public/images/edit.png" width="20"></a>
-                                <form action="/filialuszn/delete/<%= field.id %>" method="post" style="display:inline;">
-                                    <input type="image" src="/public/images/delete.png" width="20" value="Удалить" />
-                                </form>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </article>
-        <!-- Навигация -->
-        <nav></nav>
-        <!-- Боковая панель -->
-        <aside></aside>
-    </div>
-    <%- include('blocks/footer') %>
+							<td>
+								<a href="/filialuszn/edit/<%= field.id %>" method="get"><img title="Редактировать" src="/public/images/edit.png" width="25"></a>
+								<form action="/filialuszn/delete/<%= field.id %>" method="post" style="display:inline;">
+									<a href="/filialuszn/delete/<%= field.id %>">
+										<input title="Удалить" type="image" src="/public/images/delete.png" width="25" />
+									</a>
+								</form>
+							</td>
+						</tr>
+					<% }) %>
+				</tbody>
+			</table>
+		</article>
+		<!-- Навигация -->
+		<nav></nav>
+		<!-- Боковая панель -->
+		<aside></aside>
+	</div>
+	<%- include('blocks/footer') %>
 </body>
 <html>
