@@ -2,8 +2,6 @@ const Template = require('../models/template.js');
 const Filial = require('../models/filialuszn.js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
-// const http = require('http');
-const request = require('request');
 const ini = require('ini');
 
 const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
@@ -57,6 +55,10 @@ exports.posttemplate = function (req, res) {
     })
     .then(() => {
         res.redirect('/template');
+        fs.copyFile('./temp/temp.csv', './downloan/table.csv', (err) => {
+            if (err) throw err;
+            console.log('temp.csv был скопирован в table.csv');
+        });
     })
     .catch(err => console.error(err));
 };
@@ -108,4 +110,9 @@ exports.checkalltemplate  = (req, res) => {
         .catch(err => console.error(err));
     })
     .catch(err => console.error(err));
+};
+
+// Скачать
+exports.getdownloan = function (req, res) {
+    res.download('./downloan/table.csv');
 };

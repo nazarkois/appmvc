@@ -1,5 +1,5 @@
 const FilialUSZN = require('../models/filialuszn.js');
-const Directory = require('../models/directory.js')
+const Directory = require('../models/directory.js');
 
 // Получение данных
 exports.getfilialsUSZN = function(req, res) {
@@ -27,13 +27,14 @@ exports.postfilialUSZN = function (req, res) {
     const townUSZN = req.body.town;
     const serverUSZN = req.body.server;
     const dbUSZN = req.body.db;
-    const fileparamUSZN = req.body.fileuszn;
+    const filemaskUSZN = req.body.filemask;
     const statusUSZN = req.body.status;
     const portUSZN = req.body.port;
     const filenameUSZN = req.body.filename;
     const emailUSZN = req.body.email;
+    const ticketUSZN = req.body.ticket;
     FilialUSZN
-    .create({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN, port: portUSZN, filename: filenameUSZN, email: emailUSZN })
+    .create({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, filemask: filemaskUSZN, status: statusUSZN, port: portUSZN, filename: filenameUSZN, email: emailUSZN, ticket:  ticketUSZN })
     .then(() => {
         res.redirect('/filialuszn');
     })
@@ -60,13 +61,14 @@ exports.updatefilialUSZN = function (req, res) {
     const townUSZN = req.body.town;
     const serverUSZN = req.body.server;
     const dbUSZN = req.body.db;
-    const fileparamUSZN = req.body.fileuszn;
+    const filemaskUSZN = req.body.filemask;
     const statusUSZN = req.body.status;
     const portUSZN = req.body.port;
     const filenameUSZN = req.body.filename;
-    const emailUSZN = req.body.email; 
+    const emailUSZN = req.body.email;
+    const ticketUSZN = req.body.ticket; 
     FilialUSZN
-    .update({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, fileuszn: fileparamUSZN, status: statusUSZN, port: portUSZN, filename: filenameUSZN, email: emailUSZN }, {where: {id: idUSZN} })
+    .update({ filial: filialUSZN, town: townUSZN, server: serverUSZN, db: dbUSZN, filemask: filemaskUSZN, status: statusUSZN, port: portUSZN, filename: filenameUSZN, email: emailUSZN, ticket:  ticketUSZN }, {where: {id: idUSZN} })
     .then(() => {
         res.redirect('/filialuszn');
     })

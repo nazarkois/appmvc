@@ -4,34 +4,34 @@ const os = require('os');
 const _7z = require('7zip-min');
 
 const directory = (filUSZN) => {
-    var year = new Date().toISOString().split('-')[0];
-    var month = new Date().toISOString().split('-')[1];
-    var sys = new os.userInfo().homedir;
-    var dirm = sys + '\\Downloads\\' + year + '-' + month;
-
+    const year = new Date().toISOString().split('-')[0];
+    const month = new Date().toISOString().split('-')[1];
+    const sys = new os.userInfo().homedir;
+    const dirm = sys + '\\Downloads\\' + year + '-' + month;
+    
     // Создать папку по месяцу
     if (!fs.existsSync(dirm)) {
         fs.mkdirSync(dirm);
         console.log('Каталог создать: "' + dirm + '"');
     };
 
-    var dirIn = [];
-    var dirOut = [];
-    let dirDbfdel = [];
+    const dirIn = [];
+    const dirOut = [];
+    const dirDbfdel = [];
     // Создать папку по филиалам
     filUSZN.findAndCountAll().then(result => {
         for (i in result.rows) {
             var idUSZN = result.rows[i].dataValues.id;
             var dirf = result.rows[i].dataValues.town;
-            var dir = dirm + '/' + dirf + ' -';
+            var dir = dirm + '\\' + dirf + ' -';
 
             // Поиск папку по филиалам
-            var b = false;
+            b = false;
             var dirA = fs.readdirSync(dirm);                
             var dirB = [];
             for (j in dirA) {
                 if (dirA[j].toString().indexOf(dirf) != -1) {
-                    var b = true;
+                    b = true;
                     dirB.push(dirm + '\\' + dirA[j]);
                 };                
             };
@@ -39,13 +39,16 @@ const directory = (filUSZN) => {
             if (!b) {
                 fs.mkdirSync(dir);
                 console.log('Каталог создать: "' + dirf + '"');
-
+            }
+            
+            if (fs.existsSync(dirB[0])) {
                 // Статус по папке - 1. Папка без TicketID
                 filUSZN
                 .update({ status: 1, filename: null }, {where: {id: idUSZN} })
-                .catch(err => console.log(err.message));
-            } 
-            else {
+                .catch(err => console.error(err.message));
+            }
+            
+            if (b) {
                 var statusUSZN = result.rows[i].dataValues.status;
                 var dirC = fs.readdirSync(dirB[0]);
                 for (k in dirC) {
@@ -73,13 +76,26 @@ const directory = (filUSZN) => {
                         };
                         dirIn.push(dirB[0] + '\\' + dirC[k]);
                     }
-                }             
-                
+
+                    // Все файлы архивирует с Z наимением
+                    if (!dirIn.join(' ').includes(dirB[0]) && !dirOut.join(' ').includes(dirB[0] + '\\' + dirC[k]) && path.extname(dirC[k]).toUpperCase() === '.DBF' && path.basename(dirC[k]).toUpperCase()[0] === 'Z') {
+                            dirOut.push(dirB[0] + '\\' + dirC[k]);
+                    };
+                };
+
                 var filenameUSZN = dirC.join(', ');
+                var ticketUSZN = null;
+                if (dirB[0].includes(dirf)) {
+                    var ticketUSZN = dirB[0].substring(dirB[0].indexOf(dirf) + dirf.length + 2).trim();
+                };
+                console.log(dirB[0].substring(dirB[0].indexOf(dirf) + dirf.length + 2).trim());
+                
                 filUSZN
-                .update({ status: statusUSZN, filename: filenameUSZN }, {where: {id: idUSZN} })
+                .update({ status: statusUSZN, filename: filenameUSZN, ticket: ticketUSZN }, {where: {id: idUSZN} })
                 .catch(err => console.error(err));
             };
+
+            // console.log(i, dir, b, dirB, dirC);
         };
 
         // console.log(dirIn.join('\n'));

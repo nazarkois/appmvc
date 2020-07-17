@@ -12,9 +12,9 @@ const delay = ms => {
 
 const JSONtoCSV = async function(ArrParams) {
     // Все запросы к всем базы данные
-    var ArrTotal = [];
-    for (var i in ArrParams) {
-        var sequelize = new Sequelize(ArrParams[i].db, ArrParams[i].user, ArrParams[i].pass, {
+    let ArrTotal = [];
+    for (i in ArrParams) {
+        let sequelize = new Sequelize(ArrParams[i].db, ArrParams[i].user, ArrParams[i].pass, {
             dialect: ArrParams[i].dial,
             host: ArrParams[i].server,
             port: ArrParams[i].port,
@@ -30,11 +30,11 @@ const JSONtoCSV = async function(ArrParams) {
             for (j in query) {
                 ArrTotal.push(query[j]); 
             };
-            // console.log(JSON.stringify(ArrTotal));
+            console.log('===================================================');
+            console.log(JSON.stringify(ArrTotal));
         })
         .catch(err => console.error(err))
-    }   
-    await console.log(JSON.stringify(ArrTotal));
+    };
 
     // JSON конвертировать CSV 
     const csv = Papa.unparse(ArrTotal, { delimiter: ';', header: true });

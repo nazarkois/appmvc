@@ -9,9 +9,9 @@
     <%- include('blocks/header') %>
     <div id="main">
         <!-- Статья -->
-        <article>
+        <article style="display: table">
             <h1>Запрос</h1>
-            <form action="/template" method="post" name="form1">
+            <form action="/template" method="post" name="form1" style="display: table-row">
                 <!-- <p><b>Путь к шаблону:</b><br>
                 <input name="pathtem" value="<%= pathtem %>" class="field" type="text" size="133"><br>
                 <p><b>Путь к файлу:</b><br>
@@ -21,6 +21,10 @@
                 <br>
 
                 <input name="button1" type="submit" value="Конвертировать CSV"/>
+                <!-- <a href="/template/downloancsv">Скачать CSV</a> -->
+            </form>
+            <form action="/template/downloancsv" method="get" name="form2" style="display: table-row">
+                <input name="button2" type="submit" value="Скачать CSV"/>
             </form>
         </article>
         <!-- Навигация -->

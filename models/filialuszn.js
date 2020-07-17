@@ -7,6 +7,7 @@ const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
 const sequelize = new Sequelize(config.database.database, config.database.user, config.database.password, {
     dialect: config.database.dialect,
     host: config.database.server,
+    port: config.database.port,
     define: { timestamps: false, freezeTableName: true }
 });
 
@@ -33,7 +34,7 @@ const FilialUSZN = sequelize.define('zz_filialsUSZN', {
         type: Sequelize.STRING,
         allowNull: true
     },
-    fileuszn: {
+    filemask: {
         type: Sequelize.STRING,
         allowNull: true
     },
@@ -56,6 +57,10 @@ const FilialUSZN = sequelize.define('zz_filialsUSZN', {
     email: {
         type: Sequelize.STRING,
         allowNull: true        
+    },
+    ticket: {
+        type: Sequelize.STRING,
+        allowNull: true
     }
 });
 

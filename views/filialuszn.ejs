@@ -40,9 +40,10 @@
 						<th>Сервер</th>
 						<!-- <th>Порт</th> -->
 						<!-- <th>БД</th> -->
-						<!-- <th>Маска файла</th> -->
 						<th>E-mail</th>
+						<th>Маска файла</th>
 						<th>Файл</th>
+						<th>Номер заявки</th>
 						<th>Статус</th>
 						<th>Операции</th>
 					</tr>
@@ -56,9 +57,10 @@
 							<td><%= field.server %></td>
 							<!-- <td><%= field.port %></td> -->
 							<!-- <td><%= field.db %></td> -->
-							<!-- <td><%= field.fileuszn %></td> -->
 							<th><%= field.email %></th>
+							<td><%= field.filemask %></td>
 							<td><%= field.filename %></td>
+							<td><%= field.ticket %></td>
 
 							<% if (field.status === 1) {%>
 								<td><input type="image" src="/public/images/folder-empty.png" width="25"></td>
